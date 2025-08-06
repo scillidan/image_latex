@@ -13,19 +13,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install Dependencies
+      - name: Set up ImageMagick
         run: |
-          npm install -g imagemin-cli@latest imagemin-webp@latest
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
 
       - name: Compress JPG to WEBP
         run: |
           mkdir -p webp
-          imagemin *.jpg --out-dir=webp --plugin=webp --options='{ "quality": 80 }'
+          for img in *.jpg; do
+            convert "$img" -quality 80 "webp/${img%.jpg}.webp"
+          done
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
