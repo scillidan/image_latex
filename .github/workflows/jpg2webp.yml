@@ -20,12 +20,12 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install -g imagemin-cli imagemin-webp
+          npm install -g imagemin-cli imagemin-webp sharp
 
       - name: Compress JPG to WEBP
         run: |
           mkdir -p webp
-          imagemin *.jpg --out-dir=webp --plugin=webp --options='{ "quality": 80 }'
+          npx sharp *.jpg -webp { quality: 80 } webp/output.webp
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
