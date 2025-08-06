@@ -1,0 +1,36 @@
+name: Compress JPG to WEBP and Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '*.jpg'
+
+jobs:
+  compress_upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: |
+          npm install -g imagemin-cli imagemin-webp
+
+      - name: Compress JPG to WEBP
+        run: |
+          mkdir -p webp
+          imagemin images/*.jpg --out-dir=webp --plugin=webp --options='{ "quality": 80 }'
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./webp
