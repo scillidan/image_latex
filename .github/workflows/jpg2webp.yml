@@ -27,7 +27,7 @@ jobs:
       - name: Compress JPG to WEBP
         run: |
           mkdir -p webp
-          imagemin images/*.jpg --out-dir=webp --plugin=webp --options='{ "quality": 80 }'
+          imagemin *.jpg --out-dir=webp --plugin=webp --options='{ "quality": 80 }'
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
